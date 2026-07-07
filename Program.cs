@@ -49,7 +49,7 @@ builder.Services.AddIdentityCore<IdentityUser>(config =>
         })
 .AddRoles<IdentityRole>()  //add the role service.  
 .AddEntityFrameworkStores<TabloidDbContext>();
-
+builder.Services.AddAuthorization();
 // allows passing datetimes without time zone data 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
