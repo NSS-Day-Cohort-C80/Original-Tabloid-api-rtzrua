@@ -5,6 +5,7 @@ using Tabloid.Models;
 using Tabloid.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -48,7 +49,13 @@ public class PostController : ControllerBase
         {
             return NotFound();
         }
+        string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        UserProfile currentUser = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
 
+        if (currentUser == null || post.UserProfileId != currentUser.Id)
+        {
+            return Forbid();
+        }
         _dbContext.Posts.Remove(post);
         _dbContext.SaveChanges();
 
