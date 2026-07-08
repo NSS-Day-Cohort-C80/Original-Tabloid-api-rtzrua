@@ -24,8 +24,8 @@ public class PostController : ControllerBase
     }
 
     // Add your controllers here
-[HttpGet]
-[Authorize]
+    [HttpGet]
+    [Authorize]
     public IActionResult GetPosts()
     {
         List<Post> posts = _dbContext.Posts
@@ -39,7 +39,24 @@ public class PostController : ControllerBase
         return Ok(postDTOs);
     }
 
+    [HttpGet("{id}")]
+    [Authorize]
+    public IActionResult GetPostDetails(int id)
+    {
+        Post post = _dbContext.Posts
+            .Include(p => p.UserProfile)
+            .ThenInclude(up => up.IdentityUser)
+            .SingleOrDefault(p => p.Id == id);
 
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        PostDetailDTO postDetailDTO = _mapper.Map<PostDetailDTO>(post);
+
+        return Ok(postDetailDTO);
+    }
 
 
 }
