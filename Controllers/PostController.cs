@@ -24,7 +24,8 @@ public class PostController : ControllerBase
     }
 
     // Add your controllers here
-[HttpGet("posts")]
+[HttpGet]
+// [Authorize]
     public IActionResult GetPosts()
     {
         List<Post> posts = _dbContext.Posts
