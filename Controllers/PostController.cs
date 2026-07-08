@@ -58,7 +58,21 @@ public class PostController : ControllerBase
         return Ok(postDetailDTO);
     }
 
+    [HttpGet("byuser/{userProfileId}")]
+    [Authorize]
+    public IActionResult GetPostsByUser(int userProfileId)
+    {
+        List<Post> posts = _dbContext.Posts
+            .Include(p => p.UserProfile)
+            .Where(p => p.UserProfileId == userProfileId)
+            .Where(p => p.PublicationDate <= DateTime.Now)
+            .OrderByDescending(p => p.PublicationDate)
+            .ToList();
 
+        List<PostDTO> postDTOs = _mapper.Map<List<PostDTO>>(posts);
+
+        return Ok(postDTOs);
+    }
 }
 
 
