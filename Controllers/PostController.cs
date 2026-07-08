@@ -40,7 +40,7 @@ public class PostController : ControllerBase
         return Ok(postDTOs);
     }
     [HttpDelete("{id}")]
-    //[Authorize]
+    [Authorize]
     public IActionResult DeletePost(int id)
     {
         Post post = _dbContext.Posts.SingleOrDefault(p => p.Id == id);
