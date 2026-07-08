@@ -12,19 +12,20 @@ namespace Tabloid.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TabloidController : ControllerBase
+public class PostController : ControllerBase
 {
     private TabloidDbContext _dbContext;
     private readonly IMapper _mapper;
 
-    public UserProfileController(TabloidDbContext context, IMapper mapper)
+    public PostController(TabloidDbContext context, IMapper mapper)
     {
         _dbContext = context;
         _mapper = mapper;
     }
 
     // Add your controllers here
-[HttpGet("posts")]
+[HttpGet]
+[Authorize]
     public IActionResult GetPosts()
     {
         List<Post> posts = _dbContext.Posts
