@@ -52,18 +52,40 @@ public class PostController : ControllerBase
         string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         UserProfile currentUser = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
 
-        if (currentUser == null || post.UserProfileId != currentUser.Id)
-        {
-            return Forbid();
-        }
-        _dbContext.Posts.Remove(post);
-        _dbContext.SaveChanges();
+    [HttpGet("{id}")]
+    [Authorize]
+    public IActionResult GetPostDetails(int id)
+    {
+        Post post = _dbContext.Posts
+            .Include(p => p.UserProfile)
+            .ThenInclude(up => up.IdentityUser)
+            .SingleOrDefault(p => p.Id == id);
 
-        return NoContent();
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        PostDetailDTO postDetailDTO = _mapper.Map<PostDetailDTO>(post);
+
+        return Ok(postDetailDTO);
     }
 
+    [HttpGet("byuser/{userProfileId}")]
+    [Authorize]
+    public IActionResult GetPostsByUser(int userProfileId)
+    {
+        List<Post> posts = _dbContext.Posts
+            .Include(p => p.UserProfile)
+            .Where(p => p.UserProfileId == userProfileId)
+            .Where(p => p.PublicationDate <= DateTime.Now)
+            .OrderByDescending(p => p.PublicationDate)
+            .ToList();
 
+        List<PostDTO> postDTOs = _mapper.Map<List<PostDTO>>(posts);
 
+        return Ok(postDTOs);
+    }
 }
 
 
