@@ -15,9 +15,11 @@ public class Post
     [Required]
     public string Category { get; set; }
     public string ImageLocation { get; set; }
-    public DateTime PublicationDate { get; set;}
+    public DateTime? PublicationDate { get; set;}
     public int UserProfileId { get; set; }
     public int TagId { get; set; }
     public int ReactionId { get; set; }  
     public UserProfile UserProfile { get; set; }
+    public bool isApproved { get; set; }
+    public DateTime CreationDate { get; set; }
 }
