@@ -20,5 +20,7 @@ public class AutoMapperProfiles : Profile
        CreateMap<TagDTO, Tag>();
        CreateMap<UserProfile, UserProfileDTO>();
        CreateMap<UserProfileDTO, UserProfile>();
+       CreateMap<Post, PostDetailDTO>()
+    .ForMember(dto => dto.AuthorUserName, opt => opt.MapFrom(p => p.UserProfile.IdentityUser.UserName));
     }
 }
