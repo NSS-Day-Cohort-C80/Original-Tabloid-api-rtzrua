@@ -5,6 +5,7 @@ using Tabloid.Models;
 using Tabloid.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -24,8 +25,8 @@ public class PostController : ControllerBase
     }
 
     // Add your controllers here
-[HttpGet]
-[Authorize]
+    [HttpGet]
+    [Authorize]
     public IActionResult GetPosts()
     {
         List<Post> posts = _dbContext.Posts
@@ -38,7 +39,28 @@ public class PostController : ControllerBase
 
         return Ok(postDTOs);
     }
+    [HttpDelete("{id}")]
+    //[Authorize]
+    public IActionResult DeletePost(int id)
+    {
+        Post post = _dbContext.Posts.SingleOrDefault(p => p.Id == id);
 
+        if (post == null)
+        {
+            return NotFound();
+        }
+        string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        UserProfile currentUser = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
+
+        if (currentUser == null || post.UserProfileId != currentUser.Id)
+        {
+            return Forbid();
+        }
+        _dbContext.Posts.Remove(post);
+        _dbContext.SaveChanges();
+
+        return NoContent();
+    }
 
 
 
