@@ -19,4 +19,5 @@ public class Post
     public int UserProfileId { get; set; }
     public int TagId { get; set; }
     public int ReactionId { get; set; }  
+    public UserProfile UserProfile { get; set; }
 }
