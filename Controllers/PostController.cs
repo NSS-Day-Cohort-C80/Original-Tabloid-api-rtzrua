@@ -52,16 +52,24 @@ public class PostController : ControllerBase
         string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         UserProfile currentUser = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
 
-        if (currentUser == null || post.UserProfileId != currentUser.Id)
+    [HttpGet("{id}")]
+    [Authorize]
+    public IActionResult GetPostDetails(int id)
+    {
+        Post post = _dbContext.Posts
+            .Include(p => p.UserProfile)
+            .ThenInclude(up => up.IdentityUser)
+            .SingleOrDefault(p => p.Id == id);
+
+        if (post == null)
         {
-            return Forbid();
+            return NotFound();
         }
-        _dbContext.Posts.Remove(post);
-        _dbContext.SaveChanges();
 
-        return NoContent();
+        PostDetailDTO postDetailDTO = _mapper.Map<PostDetailDTO>(post);
+
+        return Ok(postDetailDTO);
     }
-
 
 
 }
