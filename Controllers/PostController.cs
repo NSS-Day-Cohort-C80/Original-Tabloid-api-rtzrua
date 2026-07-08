@@ -5,6 +5,7 @@ using Tabloid.Models;
 using Tabloid.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -38,6 +39,18 @@ public class PostController : ControllerBase
 
         return Ok(postDTOs);
     }
+    [HttpDelete("{id}")]
+    //[Authorize]
+    public IActionResult DeletePost(int id)
+    {
+        Post post = _dbContext.Posts.SingleOrDefault(p => p.Id == id);
+
+        if (post == null)
+        {
+            return NotFound();
+        }
+        string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        UserProfile currentUser = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
 
     [HttpGet("{id}")]
     [Authorize]
