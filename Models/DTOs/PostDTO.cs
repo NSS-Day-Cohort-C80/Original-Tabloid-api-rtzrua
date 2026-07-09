@@ -17,4 +17,5 @@ public class PostDTO
     public int TagId { get; set; }
     public int ReactionId { get; set; } 
     public DateTime CreationDate { get; set; }
+    public string AuthorName { get; set; }  
 }

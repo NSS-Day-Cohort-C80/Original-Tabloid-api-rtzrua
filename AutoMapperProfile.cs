@@ -10,7 +10,8 @@ public class AutoMapperProfiles : Profile
     {
        CreateMap<Category, CategoryDTO>();
        CreateMap<CategoryDTO, Category>();
-       CreateMap<Post, PostDTO>();
+       CreateMap<Post, PostDTO>()
+    .ForMember(dto => dto.AuthorName, opt => opt.MapFrom(p => p.UserProfile.FullName));
        CreateMap<PostDTO, Post>();
        CreateMap<PostTag, PostTagDTO>();
        CreateMap<PostTagDTO, PostTag>();
