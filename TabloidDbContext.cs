@@ -11,6 +11,7 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
 
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<Post> Posts { get; set; }
+    public DbSet<Reaction> Reactions { get; set; }
 
 
     public TabloidDbContext(DbContextOptions<TabloidDbContext> context, IConfiguration config) : base(context)
