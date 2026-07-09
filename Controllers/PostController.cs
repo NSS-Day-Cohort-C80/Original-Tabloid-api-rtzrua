@@ -97,6 +97,28 @@ public class PostController : ControllerBase
         _dbContext.SaveChanges();
         return NoContent();
     }
+        [HttpGet("myposts")]
+    [Authorize]
+    public IActionResult GetMyPosts()
+    {
+        string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        UserProfile currentUser = _dbContext.UserProfiles
+            .SingleOrDefault(up => up.IdentityUserId == identityUserId);
+
+        if (currentUser == null)
+        {
+            return Unauthorized();
+        }
+
+        List<Post> posts = _dbContext.Posts
+            .Where(p => p.UserProfileId == currentUser.Id)
+            .OrderByDescending(p => p.PublicationDate)   
+            .ToList();
+
+        List<PostDTO> postDTOs = _mapper.Map<List<PostDTO>>(posts);
+
+        return Ok(postDTOs);
+    }
 }
 
 

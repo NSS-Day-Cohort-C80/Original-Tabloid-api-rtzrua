@@ -15,5 +15,6 @@ public class PostDTO
     public DateTime PublicationDate { get; set;}
     public int UserProfileId { get; set; }
     public int TagId { get; set; }
-    public int ReactionId { get; set; }  
+    public int ReactionId { get; set; } 
+    public string AuthorName { get; set; }  
 }
