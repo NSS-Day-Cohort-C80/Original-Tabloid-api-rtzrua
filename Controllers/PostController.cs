@@ -99,6 +99,38 @@ public class PostController : ControllerBase
         return Ok(postDTOs);
     }
 
+    [HttpPut("{id}")]
+    [Authorize]
+    public IActionResult UpdatePost(int id, Post post)
+    {
+        if (id != post.Id)
+        {
+            return BadRequest();
+        }
+        Post postToUpdate = _dbContext.Posts.SingleOrDefault(p => p.Id == id);
+
+        if (postToUpdate == null)
+        {
+            return NotFound();
+        }
+        string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        UserProfile currentUser = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
+        if (currentUser == null || postToUpdate.UserProfileId != currentUser.Id)
+        {
+            return Forbid();
+        }
+
+        postToUpdate.Title = post.Title;
+        postToUpdate.Content = post.Content;
+        postToUpdate.Category = post.Category;
+        postToUpdate.ImageLocation = post.ImageLocation;
+        postToUpdate.PublicationDate = post.PublicationDate;
+
+        _dbContext.SaveChanges();
+
+        return NoContent();
+    }
+
     [HttpDelete("{id}")]
     [Authorize]
     public IActionResult DeletePost(int id)
