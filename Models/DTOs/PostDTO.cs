@@ -13,7 +13,7 @@ public class PostDTO
     public string Category { get; set; }
     public string ImageLocation { get; set; }
     public DateTime PublicationDate { get; set;}
-    public int UserProfileId { get; set; }
+    public int UserProfileId { get; set; }                                                                                                                                                                                                                                             
     public int TagId { get; set; }
     public int ReactionId { get; set; } 
     public DateTime CreationDate { get; set; }
