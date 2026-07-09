@@ -4,6 +4,7 @@ using Tabloid.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Tabloid.Data;
+
 public class TabloidDbContext : IdentityDbContext<IdentityUser>
 {
     private readonly IConfiguration _configuration;
@@ -147,80 +148,80 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
             }
         });
 
-    modelBuilder.Entity<Post>().HasData(new Post[]
-{
-    new Post
-    {
-        Id = 1,
-        Title = "Local Coffee Shop Wins Award",
-        Content = "The neighborhood favorite took home top honors this year...",
-        Category = "Local News",
-        ImageLocation = "https://robohash.org/post1.png?size=150x150&set=set1",
-        PublicationDate = new DateTime(2026, 6, 1),
-        UserProfileId = 1,
-        TagId = 1,
-        ReactionId = 1
-    },
-    new Post
-    {
-        Id = 2,
-        Title = "Tech Trends to Watch",
-        Content = "Here's what's shaping the industry this year...",
-        Category = "Technology",
-        ImageLocation = "https://robohash.org/post2.png?size=150x150&set=set1",
-        PublicationDate = new DateTime(2026, 6, 15),
-        UserProfileId = 2,
-        TagId = 1,
-        ReactionId = 1
-    },
-    new Post
-    {
-        Id = 3,
-        Title = "The Future of Renewable Energy",
-        Content = "Experts weigh in on what's next for solar and wind power...",
-        Category = "Science",
-        ImageLocation = "https://robohash.org/post3.png?size=150x150&set=set1",
-        PublicationDate = new DateTime(2026, 7, 1),
-        UserProfileId = 3,
-        TagId = 1,
-        ReactionId = 1
-    },
-    new Post
-    {
-        Id = 4,
-        Title = "Championship Game Recap",
-        Content = "It was a nail-biter down to the final seconds...",
-        Category = "Sports",
-        ImageLocation = "https://robohash.org/post4.png?size=150x150&set=set1",
-        PublicationDate = new DateTime(2026, 7, 5),
-        UserProfileId = 4,
-        TagId = 1,
-        ReactionId = 1
-    },
-    new Post
-    {
-        Id = 5,
-        Title = "Upcoming Music Festival Lineup",
-        Content = "This year's festival promises an unforgettable lineup...",
-        Category = "Entertainment",
-        ImageLocation = "https://robohash.org/post5.png?size=150x150&set=set1",
-        PublicationDate = new DateTime(2026, 8, 1), // FUTURE - should NOT show in list
-        UserProfileId = 5,
-        TagId = 1,
-        ReactionId = 1
-    },
-    new Post
-    {
-        Id = 6,
-        Title = "New Restaurant Opens Downtown",
-        Content = "A hidden gem just opened its doors to the public...",
-        Category = "Local News",
-        ImageLocation = "https://robohash.org/post6.png?size=150x150&set=set1",
-        PublicationDate = new DateTime(2026, 9, 1), // FUTURE - should NOT show in list
-        UserProfileId = 6,
-        TagId = 1,
-        ReactionId = 1
-    }
-});
+        modelBuilder.Entity<Post>().HasData(new Post[]
+        {
+            new Post
+            {
+                Id = 1,
+                Title = "Local Coffee Shop Wins Award",
+                Content = "The neighborhood favorite took home top honors this year...",
+                Category = "Local News",
+                ImageLocation = "https://robohash.org/post1.png?size=150x150&set=set1",
+                PublicationDate = new DateTime(2026, 6, 1),
+                UserProfileId = 1,
+                TagId = 1,
+                ReactionId = 1
+            },
+            new Post
+            {
+                Id = 2,
+                Title = "Tech Trends to Watch",
+                Content = "Here's what's shaping the industry this year...",
+                Category = "Technology",
+                ImageLocation = "https://robohash.org/post2.png?size=150x150&set=set1",
+                PublicationDate = new DateTime(2026, 6, 15),
+                UserProfileId = 2,
+                TagId = 1,
+                ReactionId = 1
+            },
+            new Post
+            {
+                Id = 3,
+                Title = "The Future of Renewable Energy",
+                Content = "Experts weigh in on what's next for solar and wind power...",
+                Category = "Science",
+                ImageLocation = "https://robohash.org/post3.png?size=150x150&set=set1",
+                PublicationDate = new DateTime(2026, 7, 1),
+                UserProfileId = 3,
+                TagId = 1,
+                ReactionId = 1
+            },
+            new Post
+            {
+                Id = 4,
+                Title = "Championship Game Recap",
+                Content = "It was a nail-biter down to the final seconds...",
+                Category = "Sports",
+                ImageLocation = "https://robohash.org/post4.png?size=150x150&set=set1",
+                PublicationDate = new DateTime(2026, 7, 5),
+                UserProfileId = 4,
+                TagId = 1,
+                ReactionId = 1
+            },
+            new Post
+            {
+                Id = 5,
+                Title = "Upcoming Music Festival Lineup",
+                Content = "This year's festival promises an unforgettable lineup...",
+                Category = "Entertainment",
+                ImageLocation = "https://robohash.org/post5.png?size=150x150&set=set1",
+                PublicationDate = new DateTime(2026, 8, 1), // FUTURE - should NOT show in list
+                UserProfileId = 5,
+                TagId = 1,
+                ReactionId = 1
+            },
+            new Post
+            {
+                Id = 6,
+                Title = "New Restaurant Opens Downtown",
+                Content = "A hidden gem just opened its doors to the public...",
+                Category = "Local News",
+                ImageLocation = "https://robohash.org/post6.png?size=150x150&set=set1",
+                PublicationDate = new DateTime(2026, 9, 1), // FUTURE - should NOT show in list
+                UserProfileId = 6,
+                TagId = 1,
+                ReactionId = 1
+            }
+        });
     }
 }
