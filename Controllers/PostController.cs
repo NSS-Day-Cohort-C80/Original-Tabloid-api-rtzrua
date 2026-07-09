@@ -9,6 +9,7 @@ using System.Security.Claims;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata;
 
+
 namespace Tabloid.Controllers;
 
 [ApiController]
@@ -24,7 +25,6 @@ public class PostController : ControllerBase
         _mapper = mapper;
     }
 
-    // Add your controllers here
     [HttpGet]
     [Authorize]
     public IActionResult GetPosts()
@@ -38,30 +38,6 @@ public class PostController : ControllerBase
         List<PostDTO> postDTOs = _mapper.Map<List<PostDTO>>(posts);
 
         return Ok(postDTOs);
-    }
-
-    [HttpDelete("{id}")]
-    //[Authorize]
-    public IActionResult DeletePost(int id)
-    {
-        Post post = _dbContext.Posts.SingleOrDefault(p => p.Id == id);
-
-        if (post == null)
-        {
-            return NotFound();
-        }
-        string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        UserProfile currentUser = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
-
-        if (currentUser == null || post.UserProfileId != currentUser.Id)
-        {
-            return Forbid();
-        }
-
-        _dbContext.Posts.Remove(post);
-        _dbContext.SaveChanges();
-
-        return NoContent();
     }
 
     [HttpGet("{id}")]
@@ -99,25 +75,47 @@ public class PostController : ControllerBase
         return Ok(postDTOs);
     }
 
-    [HttpPost]
+    [HttpGet("myposts")]
     [Authorize]
-    public IActionResult CreatePost(Post post)
+    public IActionResult GetMyPosts()
     {
-        var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var profile = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
+        string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        UserProfile currentUser = _dbContext.UserProfiles
+            .SingleOrDefault(up => up.IdentityUserId == identityUserId);
 
-        if (profile == null)
+        if (currentUser == null)
+        {
+            return Unauthorized();
+        }
+
+        List<Post> posts = _dbContext.Posts
+            .Include(p => p.UserProfile)
+            .Where(p => p.UserProfileId == currentUser.Id)
+            .OrderByDescending(p => p.PublicationDate)
+            .ToList();
+
+        List<PostDTO> postDTOs = _mapper.Map<List<PostDTO>>(posts);
+
+        return Ok(postDTOs);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize]
+    public IActionResult DeletePost(int id)
+    {
+        Post post = _dbContext.Posts.SingleOrDefault(p => p.Id == id);
+        if (post == null)
         {
             return NotFound();
         }
-
-        post.isApproved = true;
-        post.CreationDate = DateTime.Now;
-        post.UserProfileId = profile.Id;
-
-        _dbContext.Posts.Add(post);
+        string identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        UserProfile currentUser = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
+        if (currentUser == null || post.UserProfileId != currentUser.Id)
+        {
+            return Forbid();
+        }
+        _dbContext.Posts.Remove(post);
         _dbContext.SaveChanges();
-
-        return Created($"/api/post/{post.Id}", post);
+        return NoContent();
     }
 }
