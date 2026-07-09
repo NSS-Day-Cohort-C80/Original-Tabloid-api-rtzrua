@@ -150,4 +150,26 @@ public class PostController : ControllerBase
         _dbContext.SaveChanges();
         return NoContent();
     }
+
+    [HttpPost]
+    [Authorize]
+    public IActionResult CreatePost(Post post)
+    {
+        var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var profile = _dbContext.UserProfiles.SingleOrDefault(up => up.IdentityUserId == identityUserId);
+
+        if (profile == null)
+        {
+            return NotFound();
+        }
+
+        post.isApproved = true;
+        post.CreationDate = DateTime.Now;
+        post.UserProfileId = profile.Id;
+
+        _dbContext.Posts.Add(post);
+        _dbContext.SaveChanges();
+
+        return Created($"/api/post/{post.Id}", post);
+    }
 }
