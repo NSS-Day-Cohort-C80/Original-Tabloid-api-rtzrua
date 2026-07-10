@@ -13,6 +13,7 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Post> Posts { get; set; }
     public DbSet<Reaction> Reactions { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 
 
     public TabloidDbContext(DbContextOptions<TabloidDbContext> context, IConfiguration config) : base(context)
@@ -234,5 +235,56 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
                 ReactionId = 1
             }
         });
+        modelBuilder.Entity<Comment>().HasData(new Comment[]
+    {
+    new Comment
+    {
+        Id = 1,
+        Subject = "Great read!",
+        Content = "I really enjoyed this piece, thanks for sharing.",
+        CreationDate = new DateTime(2026, 6, 2),
+        PostId = 1,
+        UserProfileId = 2
+    },
+    new Comment
+    {
+        Id = 2,
+        Subject = "Disagree a bit",
+        Content = "Interesting take, but I think there's more nuance here.",
+        CreationDate = new DateTime(2026, 6, 3),
+        PostId = 1,
+        UserProfileId = 3
+    },
+    new Comment
+    {
+        Id = 3,
+        Subject = "More like this please",
+        Content = "This is exactly the kind of content I subscribed for.",
+        CreationDate = new DateTime(2026, 6, 20),
+        PostId = 2,
+        UserProfileId = 1
+    },
+    new Comment
+    {
+        Id = 4,
+        Subject = "Question about sources",
+        Content = "Where did you get the statistics mentioned in paragraph two?",
+        CreationDate = new DateTime(2026, 7, 2),
+        PostId = 3,
+        UserProfileId = 4
+    },
+    new Comment
+    {
+        Id = 5,
+        Subject = "Well written",
+        Content = "Clear, concise, and easy to follow. Nice work.",
+        CreationDate = new DateTime(2026, 7, 6),
+        PostId = 4,
+        UserProfileId = 5
+    }
+    });
+
+
+
     }
 }

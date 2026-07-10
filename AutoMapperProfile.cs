@@ -23,5 +23,7 @@ public class AutoMapperProfiles : Profile
        CreateMap<UserProfileDTO, UserProfile>();
        CreateMap<Post, PostDetailDTO>()
     .ForMember(dto => dto.AuthorUserName, opt => opt.MapFrom(p => p.UserProfile.IdentityUser.UserName));
+      CreateMap<Comment, CommentDTO>()
+    .ForMember(dto => dto.AuthorDisplayName, opt => opt.MapFrom(c => c.UserProfile.FullName));   
     }
 }
