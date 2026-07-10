@@ -31,6 +31,7 @@ public class PostController : ControllerBase
     {
         List<Post> posts = _dbContext.Posts
             .Include(p => p.UserProfile)
+            .Where(p => p.IsApproved)
             .Where(p => p.PublicationDate <= DateTime.Now)
             .OrderByDescending(p => p.PublicationDate)
             .ToList();
@@ -163,7 +164,7 @@ public class PostController : ControllerBase
             return NotFound();
         }
 
-        post.isApproved = true;
+        post.IsApproved = false;
         post.CreationDate = DateTime.Now;
         post.UserProfileId = profile.Id;
 
@@ -171,5 +172,22 @@ public class PostController : ControllerBase
         _dbContext.SaveChanges();
 
         return Created($"/api/post/{post.Id}", post);
+    }
+
+    [HttpPut("approve/{id}")]
+    [Authorize(Roles = "Admin")]
+    public IActionResult ApprovePost(int id)
+    {
+        Post post = _dbContext.Posts.SingleOrDefault(p => p.Id == id);
+
+        if (post == null)
+        {
+            return NotFound();
+        }
+
+        post.IsApproved = true;
+        _dbContext.SaveChanges();
+
+        return NoContent();
     }
 }
