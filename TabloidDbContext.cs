@@ -12,6 +12,7 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Reaction> Reactions { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
 
     public TabloidDbContext(DbContextOptions<TabloidDbContext> context, IConfiguration config) : base(context)
@@ -22,6 +23,15 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Category>().HasData(new Category[]
+        {
+            new Category { Id = 1, Name = "Local News" },
+            new Category { Id = 2, Name = "Technology" },
+            new Category { Id = 3, Name = "Science" },
+            new Category { Id = 4, Name = "Sports" },
+            new Category { Id = 5, Name = "Entertainment" },
+        });
 
         modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
         {
