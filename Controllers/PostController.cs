@@ -190,4 +190,19 @@ public class PostController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet("pending")]
+    [Authorize(Roles = "Admin")]
+    public IActionResult GetPendingPosts()
+    {
+        List<Post> posts = _dbContext.Posts
+            .Include(p => p.UserProfile)
+            .Where(p => !p.IsApproved)
+            .OrderByDescending(p => p.PublicationDate)
+            .ToList();
+
+        List<PostDTO> postDTOs = _mapper.Map<List<PostDTO>>(posts);
+
+        return Ok(postDTOs);
+    }
 }
