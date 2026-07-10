@@ -12,6 +12,7 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Reaction> Reactions { get; set; }
+    public DbSet<Tag> Tags { get; set; }
 
 
     public TabloidDbContext(DbContextOptions<TabloidDbContext> context, IConfiguration config) : base(context)
@@ -22,6 +23,9 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        // Since PostTag doesn't have an Id property, we add a composite key here to combine PostId and TagId together
+        modelBuilder.Entity<PostTag>().HasKey(pt => new { pt.PostId, pt.TagId });
 
         modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
         {
@@ -160,7 +164,6 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
                 ImageLocation = "https://robohash.org/post1.png?size=150x150&set=set1",
                 PublicationDate = new DateTime(2026, 6, 1),
                 UserProfileId = 1,
-                TagId = 1,
                 ReactionId = 1
             },
             new Post
@@ -172,7 +175,6 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
                 ImageLocation = "https://robohash.org/post2.png?size=150x150&set=set1",
                 PublicationDate = new DateTime(2026, 6, 15),
                 UserProfileId = 2,
-                TagId = 1,
                 ReactionId = 1
             },
             new Post
@@ -184,7 +186,6 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
                 ImageLocation = "https://robohash.org/post3.png?size=150x150&set=set1",
                 PublicationDate = new DateTime(2026, 7, 1),
                 UserProfileId = 3,
-                TagId = 1,
                 ReactionId = 1
             },
             new Post
@@ -196,7 +197,6 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
                 ImageLocation = "https://robohash.org/post4.png?size=150x150&set=set1",
                 PublicationDate = new DateTime(2026, 7, 5),
                 UserProfileId = 4,
-                TagId = 1,
                 ReactionId = 1
             },
             new Post
@@ -208,7 +208,6 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
                 ImageLocation = "https://robohash.org/post5.png?size=150x150&set=set1",
                 PublicationDate = new DateTime(2026, 8, 1), // FUTURE - should NOT show in list
                 UserProfileId = 5,
-                TagId = 1,
                 ReactionId = 1
             },
             new Post
@@ -220,9 +219,32 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
                 ImageLocation = "https://robohash.org/post6.png?size=150x150&set=set1",
                 PublicationDate = new DateTime(2026, 9, 1), // FUTURE - should NOT show in list
                 UserProfileId = 6,
-                TagId = 1,
                 ReactionId = 1
             }
+        });
+
+        modelBuilder.Entity<Tag>().HasData(new Tag[]
+        {
+            new Tag { Id = 1, Name = "Art" },
+            new Tag { Id = 2, Name = "Cooking" },
+            new Tag { Id = 3, Name = "Gaming" },
+            new Tag { Id = 4, Name = "Movies" },
+            new Tag { Id = 5, Name = "News" },
+            new Tag { Id = 6, Name = "Political" },
+            new Tag { Id = 7, Name = "Tech" },
+            new Tag { Id = 8, Name = "Travel" }
+        });
+
+        modelBuilder.Entity<PostTag>().HasData(new PostTag[]
+        {
+            new PostTag { PostId = 1, TagId = 5 },
+            new PostTag { PostId = 2, TagId = 7 },
+            new PostTag { PostId = 3, TagId = 7 },
+            new PostTag { PostId = 4, TagId = 3 },
+            new PostTag { PostId = 4, TagId = 5 },
+            new PostTag { PostId = 5, TagId = 1 },
+            new PostTag { PostId = 6, TagId = 2 },
+            new PostTag { PostId = 6, TagId = 5 }
         });
     }
 }
