@@ -13,6 +13,7 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Post> Posts { get; set; }
     public DbSet<Reaction> Reactions { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
 
     public TabloidDbContext(DbContextOptions<TabloidDbContext> context, IConfiguration config) : base(context)
@@ -26,6 +27,14 @@ public class TabloidDbContext : IdentityDbContext<IdentityUser>
 
         // Since PostTag doesn't have an Id property, we add a composite key here to combine PostId and TagId together
         modelBuilder.Entity<PostTag>().HasKey(pt => new { pt.PostId, pt.TagId });
+        modelBuilder.Entity<Category>().HasData(new Category[]
+        {
+            new Category { Id = 1, Name = "Local News" },
+            new Category { Id = 2, Name = "Technology" },
+            new Category { Id = 3, Name = "Science" },
+            new Category { Id = 4, Name = "Sports" },
+            new Category { Id = 5, Name = "Entertainment" },
+        });
 
         modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
         {

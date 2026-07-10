@@ -20,6 +20,6 @@ public class Post
     public int TagId { get; set; }
     public int ReactionId { get; set; }  
     public UserProfile UserProfile { get; set; }
-    public bool isApproved { get; set; }
+    public bool IsApproved { get; set; }
     public DateTime CreationDate { get; set; }
 }
